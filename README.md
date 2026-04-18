@@ -69,7 +69,7 @@ data/raw/
 python -m src.run_experiment
 ```
 
-This script provides a reference entry point for the full experimental workflow, including data preprocessing, model training, and result generation.
+This script is intended to provide a reference entry point for the full experimental workflow, including data preprocessing, model training, and result generation.
 
 ⚠️ Note:
 
@@ -85,11 +85,11 @@ This script provides a reference entry point for the full experimental workflow,
 python -m src.preprocess
 ```
 
-This will:
-- Validate and load raw images
-- Preprocess images (resize to 224x224)
-- Split data into train/val/test (70/15/15)
-- Save splits to `./data/splits/`
+Expected outputs include:
+
+- Validated and loaded raw images
+- Preprocessed images (resized to 224x224)
+- Train/val/test splits (70/15/15) saved to `./data/splits/`
 
 #### Step 2: Model Training
 
@@ -97,12 +97,12 @@ This will:
 python -m src.train
 ```
 
-This will:
-- Train 3 models: Baseline ResNet-50, +SE (layer4), +SE (avgpool)
-- Perform 3 seeds x 5-fold cross-validation
-- Train final models on full training data
-- Evaluate on held-out test set
-- Perform statistical analysis
+Expected outputs include:
+
+- Three trained models: Baseline ResNet-50, +SE (layer4), +SE (avgpool)
+- Cross-validation results (3 seeds × 5 folds)
+- Final model evaluation on held-out test set
+- Statistical analysis results
 
 #### Step 3: Generate Figures
 
@@ -110,7 +110,8 @@ This will:
 python -m src.generate_figures
 ```
 
-This will generate all paper figures:
+This script is intended to generate all paper figures:
+
 - Figure 1: Model Comparison Bar Chart
 - Figure 2: Confusion Matrix
 - Figure 3: Training Curves
@@ -120,7 +121,8 @@ This will generate all paper figures:
 
 ### Output
 
-Results are saved to:
+Results are expected to be saved to:
+
 ```
 results/experiment_results/
 ├── cv_summary_baseline.json
@@ -131,7 +133,8 @@ results/experiment_results/
 └── REPORT.md
 ```
 
-Figures are saved to:
+Figures are expected to be saved to:
+
 ```
 figures/
 ├── figure1_model_comparison.png
@@ -151,6 +154,7 @@ Three ResNet-50 based models are evaluated:
 3. **+SE (avgpool)**: ResNet-50 with SE attention after avgpool
 
 SE attention module implements channel-wise feature recalibration via:
+
 - Squeeze: Global average pooling
 - Excitation: FC(2048 -> 128) -> ReLU -> FC(128 -> 2048) -> Sigmoid
 - Scale: Channel-wise multiplication
@@ -174,38 +178,30 @@ SE attention module implements channel-wise feature recalibration via:
 ## Reproducibility
 
 ### Main Results
+
 - Primary results are reported from 3 seeds × 5-fold cross-validation (15 runs total)
 - Mean ± standard deviation is calculated across all 15 runs
 - Cross-validation is performed only on train/val set (85% of data)
 
 ### Test Set Usage
+
 - Test set (15% of data) is held out during model development and hyperparameter tuning
 - Test set is evaluated only once per seed after final model selection
 - Test set results serve as final validation of model performance
 
 ### Randomness Control
+
 - All random seeds are set for reproducibility
 - Data splits are fixed across runs using the specified seeds
 - Model initialization is controlled via PyTorch's random seed
 
 ## Notes
 
-- The `results/` and `figures/` directories are automatically created in the project root
-- This repository provides the complete code for reproducing the reported results
-- Pre-trained weights are not provided in this repository
-- All experiments were conducted on standard hardware (GPU recommended)
+- This repository is intended to provide the code and configuration required to reproduce the reported experiments.
+- The `results/` and `figures/` directories are automatically created in the project root.
+- Pre-trained weights are not provided in this repository.
+- All experiments were conducted on standard hardware (GPU recommended).
 
 ## Citation
 
-Citation will be updated after publication.
-
-```
-@article{
-  title={Cervical Cancer Classification with Squeeze-and-Excitation Attention},
-  author={},
-  journal={},
-  year={},
-  volume={},
-  pages={}
-}
-```
+Citation information will be updated after publication.
