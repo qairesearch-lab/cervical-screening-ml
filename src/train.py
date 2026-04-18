@@ -2,12 +2,12 @@
 """
 Unified Cervical Cancer Classification Experiment
 ==================================================
-Main training script for ResNet-50 models with SE (Squeeze-and-Excitation) attention.
+Main training script for ResNet-50 models with dual-pooling channel-attention.
 
 This script implements:
     1. ResNet-50 Baseline
-    2. ResNet-50 + SE Attention (layer4)
-    3. ResNet-50 + SE Attention (avgpool)
+    2. ResNet-50 + dual-pooling channel-attention (layer4)
+    3. ResNet-50 + dual-pooling channel-attention (avgpool)
 
 Training strategy:
     - Step 1: 3 seeds x 5-fold CV (train/val only, primary results)
@@ -510,12 +510,12 @@ def write_report(cv_summary_baseline, cv_summary_se, cv_summary_se_avgpool, test
               f"{fmt(b_cv['recall']['mean'], b_cv['recall']['std'])} | "
               f"{fmt(b_cv['f1']['mean'], b_cv['f1']['std'])} |")
 
-    md.append(f"| +SE (layer4) | {fmt(s_cv['accuracy']['mean'], s_cv['accuracy']['std'])} | "
+    md.append(f"| +dual-pooling (layer4) | {fmt(s_cv['accuracy']['mean'], s_cv['accuracy']['std'])} | "
               f"{fmt(s_cv['precision']['mean'], s_cv['precision']['std'])} | "
               f"{fmt(s_cv['recall']['mean'], s_cv['recall']['std'])} | "
               f"{fmt(s_cv['f1']['mean'], s_cv['f1']['std'])} |")
 
-    md.append(f"| +SE (avgpool) | {fmt(s_avgpool_cv['accuracy']['mean'], s_avgpool_cv['accuracy']['std'])} | "
+    md.append(f"| +dual-pooling (avgpool) | {fmt(s_avgpool_cv['accuracy']['mean'], s_avgpool_cv['accuracy']['std'])} | "
               f"{fmt(s_avgpool_cv['precision']['mean'], s_avgpool_cv['precision']['std'])} | "
               f"{fmt(s_avgpool_cv['recall']['mean'], s_avgpool_cv['recall']['std'])} | "
               f"{fmt(s_avgpool_cv['f1']['mean'], s_avgpool_cv['f1']['std'])} |")
@@ -523,8 +523,8 @@ def write_report(cv_summary_baseline, cv_summary_se, cv_summary_se_avgpool, test
     acc_diff_cv = s_cv['accuracy']['mean'] - b_cv['accuracy']['mean']
     acc_diff_cv_avgpool = s_avgpool_cv['accuracy']['mean'] - b_cv['accuracy']['mean']
     md.append("")
-    md.append(f"**CV Accuracy Improvement (+SE layer4):** {acc_diff_cv*100:+.2f}%")
-    md.append(f"**CV Accuracy Improvement (+SE avgpool):** {acc_diff_cv_avgpool*100:+.2f}%")
+    md.append(f"**CV Accuracy Improvement (+dual-pooling layer4):** {acc_diff_cv*100:+.2f}%")
+    md.append(f"**CV Accuracy Improvement (+dual-pooling avgpool):** {acc_diff_cv_avgpool*100:+.2f}%")
     md.append("")
 
     md.append("## Final Test Evaluation (3 runs per model)")
@@ -532,14 +532,14 @@ def write_report(cv_summary_baseline, cv_summary_se, cv_summary_se_avgpool, test
     md.append("| Model | Test Accuracy |")
     md.append("|-------|---------------|")
     md.append(f"| Baseline | {fmt(test_baseline['mean'], test_baseline['std'])} |")
-    md.append(f"| +SE (layer4) | {fmt(test_se['mean'], test_se['std'])} |")
-    md.append(f"| +SE (avgpool) | {fmt(test_se_avgpool['mean'], test_se_avgpool['std'])} |")
+    md.append(f"| +dual-pooling (layer4) | {fmt(test_se['mean'], test_se['std'])} |")
+    md.append(f"| +dual-pooling (avgpool) | {fmt(test_se_avgpool['mean'], test_se_avgpool['std'])} |")
 
     acc_diff_test = test_se['mean'] - test_baseline['mean']
     acc_diff_test_avgpool = test_se_avgpool['mean'] - test_baseline['mean']
     md.append("")
-    md.append(f"**Test Accuracy Improvement (+SE layer4):** {acc_diff_test*100:+.2f}%")
-    md.append(f"**Test Accuracy Improvement (+SE avgpool):** {acc_diff_test_avgpool*100:+.2f}%")
+    md.append(f"**Test Accuracy Improvement (+dual-pooling layer4):** {acc_diff_test*100:+.2f}%")
+    md.append(f"**Test Accuracy Improvement (+dual-pooling avgpool):** {acc_diff_test_avgpool*100:+.2f}%")
     md.append("")
 
     md.append("## Class-wise Metrics (from CV)")
@@ -573,12 +573,12 @@ def statistical_analysis(cv_results, cv_summary_baseline, cv_summary_se, cv_summ
     se_acc = get_seed_level_means(cv_results, "se_layer4")
     se_avgpool_acc = get_seed_level_means(cv_results, "se_avgpool")
 
-    print("\n--- Baseline vs +SE (layer4) ---")
+    print("\n--- Baseline vs +dual-pooling (layer4) ---")
     t_stat, p_value = stats.ttest_rel(baseline_acc, se_acc)
 
     print(f"\nPaired t-test (n={len(baseline_acc)}):")
     print(f"  Baseline: {np.mean(baseline_acc)*100:.2f}% ± {np.std(baseline_acc, ddof=1)*100:.2f}%")
-    print(f"  SE (layer4): {np.mean(se_acc)*100:.2f}% ± {np.std(se_acc, ddof=1)*100:.2f}%")
+    print(f"  dual-pooling (layer4): {np.mean(se_acc)*100:.2f}% ± {np.std(se_acc, ddof=1)*100:.2f}%")
     print(f"  t-statistic: {t_stat:.4f}")
     print(f"  p-value: {p_value:.4f}")
 
@@ -591,12 +591,12 @@ def statistical_analysis(cv_results, cv_summary_baseline, cv_summary_se, cv_summ
     else:
         print(f"  Not significant (p >= 0.05)")
 
-    print("\n--- Baseline vs +SE (avgpool) ---")
+    print("\n--- Baseline vs +dual-pooling (avgpool) ---")
     t_stat_avgpool, p_value_avgpool = stats.ttest_rel(baseline_acc, se_avgpool_acc)
 
     print(f"\nPaired t-test (n={len(baseline_acc)}):")
     print(f"  Baseline: {np.mean(baseline_acc)*100:.2f}% ± {np.std(baseline_acc, ddof=1)*100:.2f}%")
-    print(f"  SE (avgpool): {np.mean(se_avgpool_acc)*100:.2f}% ± {np.std(se_avgpool_acc, ddof=1)*100:.2f}%")
+    print(f"  dual-pooling (avgpool): {np.mean(se_avgpool_acc)*100:.2f}% ± {np.std(se_avgpool_acc, ddof=1)*100:.2f}%")
     print(f"  t-statistic: {t_stat_avgpool:.4f}")
     print(f"  p-value: {p_value_avgpool:.4f}")
 
@@ -614,15 +614,15 @@ def statistical_analysis(cv_results, cv_summary_baseline, cv_summary_se, cv_summ
     cohens_d = mean_diff / pooled_std
 
     print(f"\n--- Effect Sizes ---")
-    print(f"\nEffect size (Cohen's d) - SE (layer4): {cohens_d:.4f}")
+    print(f"\nEffect size (Cohen's d) - dual-pooling (layer4): {cohens_d:.4f}")
 
     mean_diff_avgpool = np.mean(se_avgpool_acc) - np.mean(baseline_acc)
     pooled_std_avgpool = np.sqrt((np.var(baseline_acc, ddof=1) + np.var(se_avgpool_acc, ddof=1)) / 2)
     cohens_d_avgpool = mean_diff_avgpool / pooled_std_avgpool
 
-    print(f"Effect size (Cohen's d) - SE (avgpool): {cohens_d_avgpool:.4f}")
+    print(f"Effect size (Cohen's d) - dual-pooling (avgpool): {cohens_d_avgpool:.4f}")
 
-    for name, d in [("SE (layer4)", cohens_d), ("SE (avgpool)", cohens_d_avgpool)]:
+    for name, d in [("dual-pooling (layer4)", cohens_d), ("dual-pooling (avgpool)", cohens_d_avgpool)]:
         if abs(d) < 0.2:
             print(f"  {name}: Negligible effect")
         elif abs(d) < 0.5:

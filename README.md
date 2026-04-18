@@ -103,7 +103,7 @@ python -m src.train
 
 Expected outputs include:
 
-- Three trained models: Baseline ResNet-50, +SE (layer4), +SE (avgpool)
+- Three trained models: Baseline ResNet-50, +dual-pooling (layer4), +dual-pooling (avgpool)
 - Cross-validation results (3 seeds × 5 folds)
 - Final model evaluation on held-out test set
 - Statistical analysis results
@@ -154,8 +154,8 @@ figures/
 Three ResNet-50 based models are evaluated:
 
 1. **Baseline**: Standard ResNet-50 (ImageNet pretrained)
-2. **+SE (layer4)**: ResNet-50 with channel attention after layer4
-3. **+SE (avgpool)**: ResNet-50 with channel attention after avgpool
+2. **+dual-pooling (layer4)**: ResNet-50 with channel attention after layer4
+3. **+dual-pooling (avgpool)**: ResNet-50 with channel attention after avgpool
 
 Channel attention module implements channel-wise feature recalibration via:
 

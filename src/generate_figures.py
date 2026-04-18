@@ -59,7 +59,7 @@ def generate_figure1_model_comparison(results):
     """Generate Figure 1: Model Comparison Bar Chart (CV Results)"""
     print("Generating Figure 1: Model Comparison...")
 
-    models = ["Baseline", "+SE (layer4)", "+SE (avgpool)"]
+    models = ["Baseline", "+dual-pooling (layer4)", "+dual-pooling (avgpool)"]
     cv_keys = ["cv_summary_baseline", "cv_summary_se", "cv_summary_se_avgpool"]
 
     accuracy_means = []
@@ -96,11 +96,11 @@ def generate_figure1_model_comparison(results):
 
 
 def generate_figure2_confusion_matrix(results):
-    """Generate Figure 2: Confusion Matrix for Best Model (SE layer4)"""
+    """Generate Figure 2: Confusion Matrix for Best Model (dual-pooling layer4)"""
     print("Generating Figure 2: Confusion Matrix...")
 
     if "cv_summary_se" not in results:
-        print("[WARNING] SE results not found, skipping confusion matrix")
+        print("[WARNING] dual-pooling results not found, skipping confusion matrix")
         return
 
     class_names = ["superficial-intermediate", "parabasal", "koilocytes", "dyskeratotic", "metaplastic"]
@@ -120,7 +120,7 @@ def generate_figure2_confusion_matrix(results):
                 xticklabels=class_names, yticklabels=class_names, ax=ax)
     ax.set_xlabel('Predicted Label')
     ax.set_ylabel('True Label')
-    ax.set_title('Figure 2. Average Confusion Matrix (+SE layer4)')
+    ax.set_title('Figure 2. Average Confusion Matrix (+dual-pooling layer4)')
     plt.tight_layout()
     plt.savefig(FIGURES_DIR / "figure2_confusion_matrix.png", bbox_inches='tight')
     plt.close()
@@ -132,7 +132,7 @@ def generate_figure3_training_curves(results):
     print("Generating Figure 3: Training Curves...")
 
     if "cv_summary_se" not in results or not results["cv_summary_se"]["runs"]:
-        print("[WARNING] SE results not found, skipping training curves")
+        print("[WARNING] dual-pooling results not found, skipping training curves")
         return
 
     first_run = results["cv_summary_se"]["runs"][0]
@@ -173,7 +173,7 @@ def generate_figure4_class_performance(results):
     print("Generating Figure 4: Class-wise Performance...")
 
     if "cv_summary_se" not in results:
-        print("[WARNING] SE results not found, skipping class performance")
+        print("[WARNING] dual-pooling results not found, skipping class performance")
         return
 
     class_names = ["superficial-intermediate", "parabasal", "koilocytes", "dyskeratotic", "metaplastic"]
@@ -197,7 +197,7 @@ def generate_figure4_class_performance(results):
 
     ax.set_xlabel('Cell Class')
     ax.set_ylabel('Score (%)')
-    ax.set_title('Figure 4. Class-wise Sensitivity and Specificity (+SE layer4)')
+    ax.set_title('Figure 4. Class-wise Sensitivity and Specificity (+dual-pooling layer4)')
     ax.set_xticks(x)
     ax.set_xticklabels(short_names, rotation=15, ha='right')
     ax.legend()
@@ -236,7 +236,7 @@ def generate_figure5_statistical_analysis(results):
     seeds = range(1, len(baseline_acc) + 1)
 
     ax1.bar(seeds, baseline_acc, color='#3498db', alpha=0.8, label='Baseline')
-    ax1.bar(seeds, se_acc, bottom=baseline_acc, color='#e74c3c', alpha=0.8, label='+SE (layer4)')
+    ax1.bar(seeds, se_acc, bottom=baseline_acc, color='#e74c3c', alpha=0.8, label='+dual-pooling (layer4)')
     ax1.set_xlabel('Seed')
     ax1.set_ylabel('Accuracy (%)')
     ax1.set_title('(a) Seed-level Accuracy Comparison')
@@ -244,8 +244,8 @@ def generate_figure5_statistical_analysis(results):
 
     comparison_data = {
         'Baseline': baseline_acc,
-        '+SE (layer4)': se_acc,
-        '+SE (avgpool)': se_avgpool_acc
+        '+dual-pooling (layer4)': se_acc,
+        '+dual-pooling (avgpool)': se_avgpool_acc
     }
     bp = ax2.boxplot(comparison_data.values(), labels=comparison_data.keys(), patch_artist=True)
     colors = ['#3498db', '#e74c3c', '#2ecc71']
@@ -256,7 +256,7 @@ def generate_figure5_statistical_analysis(results):
     ax2.set_title('(b) Accuracy Distribution by Model')
 
     effect_sizes = [analysis["cohens_d"], analysis["cohens_d_avgpool"]]
-    model_names = ['+SE (layer4)', '+SE (avgpool)']
+    model_names = ['+dual-pooling (layer4)', '+dual-pooling (avgpool)']
     colors = ['#e74c3c', '#2ecc71']
     bars = ax3.bar(model_names, effect_sizes, color=colors, alpha=0.8)
     ax3.axhline(y=0.8, color='gray', linestyle='--', label='Large effect (0.8)')
@@ -270,13 +270,13 @@ def generate_figure5_statistical_analysis(results):
     Statistical Analysis Summary
     ============================
 
-    Baseline vs +SE (layer4):
+    Baseline vs +dual-pooling (layer4):
       t-statistic: {analysis['t_statistic']:.4f}
       p-value: {analysis['p_value']:.4f}
       Cohen's d: {analysis['cohens_d']:.4f}
       Significant: {'Yes' if analysis['significant'] else 'No'}
 
-    Baseline vs +SE (avgpool):
+    Baseline vs +dual-pooling (avgpool):
       t-statistic: {analysis['t_statistic_avgpool']:.4f}
       p-value: {analysis['p_value_avgpool']:.4f}
       Cohen's d: {analysis['cohens_d_avgpool']:.4f}
@@ -299,11 +299,11 @@ def generate_figure6_architecture():
 
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
-    titles = ['(a) Baseline ResNet-50', '(b) +SE (layer4)', '(c) +SE (avgpool)']
+    titles = ['(a) Baseline ResNet-50', '(b) +dual-pooling (layer4)', '(c) +dual-pooling (avgpool)']
     descriptions = [
         "Input (224x224)\n→ ResNet-50\n→ GAP\n→ FC(2048→512)\n→ FC(512→5)\n→ Output",
-        "Input (224x224)\n→ ResNet-50\n→ SE(layers[1-4])\n→ GAP\n→ FC(2048→512)\n→ FC(512→5)\n→ Output",
-        "Input (224x224)\n→ ResNet-50\n→ GAP\n→ SE(channel)\n→ FC(2048→512)\n→ FC(512→5)\n→ Output"
+        "Input (224x224)\n→ ResNet-50\n→ dual-pooling(layers[1-4])\n→ GAP\n→ FC(2048→512)\n→ FC(512→5)\n→ Output",
+        "Input (224x224)\n→ ResNet-50\n→ GAP\n→ dual-pooling(channel)\n→ FC(2048→512)\n→ FC(512→5)\n→ Output"
     ]
 
     for ax, title, desc in zip(axes, titles, descriptions):
