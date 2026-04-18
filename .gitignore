@@ -9,6 +9,8 @@ __pycache__/
 
 # Results
 /results/
+/figures/
+/.matplotlib-cache/
 
 # Model weights
 /models/
@@ -30,3 +32,6 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Changelog (not for GitHub)
+CHANGELOG.md

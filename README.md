@@ -19,7 +19,7 @@ experiments is intentionally not included in the executable path here.
     ├── preprocess.py      # Data preprocessing script
     ├── train.py           # Model training and evaluation script
     ├── run_experiment.py  # One-click experiment runner
-    └── generate_figures.py # Figure generation script
+    └── generate_figures.py # Auxiliary reference figures (A-F) + manuscript Figure 6 option
 ```
 
 ## Environment Setup
@@ -112,16 +112,46 @@ Expected outputs include:
 
 ```bash
 python -m src.generate_figures
+python -m src.generate_figures --results-dir /path/to/results
 ```
 
-This script is intended to generate all paper figures:
+This script generates auxiliary reference figures from the executable code path.
+To avoid confusion with the manuscript numbering, its outputs are intentionally
+labeled as reference figures `A-F` rather than manuscript Figures `1-6`.
 
-- Figure 1: Model Comparison Bar Chart
-- Figure 2: Confusion Matrix
-- Figure 3: Training Curves
-- Figure 4: Class-wise Performance
-- Figure 5: Statistical Analysis
-- Figure 6: Model Architecture Diagram
+- Reference Figure A: Model Comparison Bar Chart
+- Reference Figure B: Single-model averaged confusion matrix
+- Reference Figure C: Training Curves
+- Reference Figure D: Class-wise Performance
+- Reference Figure E: Statistical Analysis
+- Reference Figure F: Model Architecture Diagram
+
+#### Step 4: Reproduce manuscript Figure 3
+
+```bash
+python -m src.generate_figures --results-dir /path/to/results --paper-figure3
+```
+
+This option reproduces the manuscript Figure 3, which shows the mean training
+behavior (loss and accuracy curves) across the 15 matched development runs
+for each of the three model configurations (Baseline, Layer4 attention,
+Avgpool attention). The shaded bands indicate one standard deviation across runs.
+
+#### Step 5: Reproduce manuscript Figure 6
+
+```bash
+python -m src.generate_figures --results-dir /path/to/results --paper-figure6
+```
+
+This option reproduces the manuscript-aligned three-panel row-normalized
+confusion-matrix figure from `cv_summary_*.json` while keeping the default
+reference-figure outputs separate from the paper numbering.
+
+Both manuscript figures can be generated together:
+
+```bash
+python -m src.generate_figures --paper-figure3 --paper-figure6
+```
 
 ### Output
 
@@ -141,12 +171,14 @@ Figures are expected to be saved to:
 
 ```
 figures/
-├── figure1_model_comparison.png
-├── figure2_confusion_matrix.png
-├── figure3_training_curves.png
-├── figure4_class_performance.png
-├── figure5_statistical_analysis.png
-└── figure6_architecture.png
+├── figure_a_model_comparison.png
+├── figure_b_confusion_matrix.png
+├── figure_c_training_curves.png
+├── figure_d_class_performance.png
+├── figure_e_statistical_analysis.png
+├── figure_f_architecture.png
+├── paper_figure3_training_behavior.png  (with --paper-figure3)
+└── paper_figure6_confusion_matrices.png (with --paper-figure6)
 ```
 
 ## Model Architecture
@@ -175,7 +207,7 @@ Channel attention module implements channel-wise feature recalibration via:
 | Weight decay | 1e-4 |
 | Scheduler | CosineAnnealingLR |
 | Dropout | 0.5 |
-| SE reduction | 16 |
+| reduction ratio (r) | 16 |
 | CV folds | 5 |
 | Seeds | [42, 52, 62] |
 
