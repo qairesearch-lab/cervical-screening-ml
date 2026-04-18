@@ -1,14 +1,15 @@
 """
-Cervical Cancer Classification with SE Attention
-================================================
+A Variance-Aware Benchmarking Workflow for Reproducible Deep Learning in Cervical Cytology
+==========================================================================================
 
 This package contains the source code for the paper:
-" Cervical Cancer Classification with Squeeze-and-Excitation Attention"
+"A Variance-Aware Benchmarking Workflow for Reproducible Deep Learning in Cervical Cytology:
+ A Pilot Study on SIPaKMeD"
 
 Models:
     - ResNet-50 Baseline
-    - ResNet-50 + SE Attention (layer4)
-    - ResNet-50 + SE Attention (avgpool)
+    - ResNet-50 + Channel Attention (layer4)
+    - ResNet-50 + Channel Attention (avgpool)
 
 Dataset: SIPaKMeD (cervical cell images, 5 classes)
 

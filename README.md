@@ -1,8 +1,12 @@
-# Cervical Cancer Classification with Squeeze-and-Excitation Attention
+# A Variance-Aware Benchmarking Workflow for Reproducible Deep Learning in Cervical Cytology
 
 ## Project Description
 
-This repository contains the source code for the manuscript "Cervical Cancer Classification with Squeeze-and-Excitation Attention". The code implements deep learning models for cervical cell classification using ResNet-50 with Squeeze-and-Excitation (SE) attention mechanisms.
+This repository contains the source code for the manuscript "A Variance-Aware Benchmarking Workflow for Reproducible Deep Learning in Cervical Cytology: A Pilot Study on SIPaKMeD". The code implements deep learning models for cervical cell classification using ResNet-50 with channel attention mechanisms.
+
+This submission package corresponds to the image-only manuscript workflow.
+Handcrafted morphological-feature preprocessing explored in separate internal
+experiments is intentionally not included in the executable path here.
 
 ## Repository Structure
 
@@ -42,7 +46,7 @@ pip install -r requirements.txt
 
 The experiments use the **SIPaKMeD** cervical cell dataset.
 
-- **Source**: http://www.cs.uoi.gr/~marina/sipakmed.html
+- **Source**: https://www.cs.uoi.gr/~marina/sipakmed.html
 - **Samples**: 4,049 cell images
 - **Classes**: 5 (superficial-intermediate, parabasal, koilocytes, dyskeratotic, metaplastic)
 - **Image size**: Variable (resized to 224x224 during preprocessing)
@@ -150,12 +154,12 @@ figures/
 Three ResNet-50 based models are evaluated:
 
 1. **Baseline**: Standard ResNet-50 (ImageNet pretrained)
-2. **+SE (layer4)**: ResNet-50 with SE attention after layer4
-3. **+SE (avgpool)**: ResNet-50 with SE attention after avgpool
+2. **+SE (layer4)**: ResNet-50 with channel attention after layer4
+3. **+SE (avgpool)**: ResNet-50 with channel attention after avgpool
 
-SE attention module implements channel-wise feature recalibration via:
+Channel attention module implements channel-wise feature recalibration via:
 
-- Squeeze: Global average pooling
+- Squeeze: Global average pooling + Global max pooling (dual-pooling)
 - Excitation: FC(2048 -> 128) -> ReLU -> FC(128 -> 2048) -> Sigmoid
 - Scale: Channel-wise multiplication
 

@@ -84,7 +84,7 @@ def verify_dataset():
     # Dataset not found, show manual download instructions
     print("[ERROR] Dataset not found")
     print("\n[INFO] Please download the SIPaKMeD dataset manually:")
-    print("1. Visit: http://www.cs.uoi.gr/~marina/sipakmed.html")
+    print("1. Visit: https://www.cs.uoi.gr/~marina/sipakmed.html")
     print("2. Fill out the request form")
     print("3. Download and extract to:", RAW_DIR)
     print("4. Ensure the directory structure:")
@@ -140,7 +140,7 @@ def main():
     """Main function"""
     print("\n" + "=" * 70)
     print("One-Click Experiment Runner")
-    print("Cervical Cancer Classification with SE Attention")
+    print("Cervical Cytology Benchmarking Workflow")
     print("=" * 70)
     
     try:
@@ -151,7 +151,7 @@ def main():
         generate_report()
         
         print("\n" + "=" * 70)
-        print("🎉 Experiment completed successfully!")
+        print("Experiment completed successfully!")
         print("Results saved to: results/experiment_results/")
         print("=" * 70)
         

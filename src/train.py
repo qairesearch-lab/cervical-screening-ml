@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Unified Cervical Cancer Classification Experiment - v3.1
-=========================================================
+Unified Cervical Cancer Classification Experiment
+==================================================
 Main training script for ResNet-50 models with SE (Squeeze-and-Excitation) attention.
 
 This script implements:
@@ -41,7 +41,7 @@ import torchvision.models as models
 import warnings
 warnings.filterwarnings('ignore')
 
-# 使用相对路径，基于项目根目录
+# Use relative paths based on project root
 WORKSPACE = Path(".")
 RESULTS_DIR = WORKSPACE / "results" / "experiment_results"
 RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -156,7 +156,7 @@ def load_data():
 
     test_paths = np.load(splits_dir / "test_paths.npy", allow_pickle=True)
     test_labels = np.load(splits_dir / "test_labels.npy", allow_pickle=True)
-    # 确保路径是相对于当前工作目录的
+    # Ensure paths are relative to current working directory
     all_paths = [str(WORKSPACE / p) if not Path(p).is_absolute() else str(p) for p in all_paths]
     test_paths = [str(WORKSPACE / p) if not Path(p).is_absolute() else str(p) for p in test_paths]
 
@@ -477,7 +477,7 @@ def write_report(cv_summary_baseline, cv_summary_se, cv_summary_se_avgpool, test
         return f"{mean*100:.2f}% ± {std*100:.2f}%"
 
     md = []
-    md.append("# Unified Experiment Report - v3.1")
+    md.append("# Unified Experiment Report")
     md.append("")
     md.append("## Configuration")
     md.append("")
@@ -654,7 +654,7 @@ def statistical_analysis(cv_results, cv_summary_baseline, cv_summary_se, cv_summ
 
 def main():
     print("="*70)
-    print("Unified Cervical Cancer Classification Experiment - v3.1")
+    print("Unified Cervical Cancer Classification Experiment")
     print("Optimized Experiment Flow:")
     print("  Step 1: 3 seeds x 5-fold CV (train/val only)")
     print("  Step 2: Final model on full data (fixed 15 epochs) + test evaluation")
