@@ -46,7 +46,7 @@ pip install -r requirements.txt
 
 The experiments use the **SIPaKMeD** cervical cell dataset.
 
-- **Source**: https://www.cs.uoi.gr/~marina/sipakmed.html
+- **Source**: <https://www.cs.uoi.gr/~marina/sipakmed.html>
 - **Samples**: 4,049 cell images
 - **Classes**: 5 (superficial-intermediate, parabasal, koilocytes, dyskeratotic, metaplastic)
 - **Image size**: Variable (resized to 224x224 during preprocessing)
@@ -132,7 +132,6 @@ python -m src.generate_figures --paper-figure5  # Generate Figure 5
 python -m src.generate_figures --paper-figure6  # Generate Figure 6
 ```
 
-
 ### Output
 
 Results are expected to be saved to:
@@ -165,27 +164,23 @@ Three ResNet-50 based models are evaluated:
 2. **+dual-pooling (layer4)**: ResNet-50 with channel attention after layer4
 3. **+dual-pooling (avgpool)**: ResNet-50 with channel attention after avgpool
 
-Channel attention module implements channel-wise feature recalibration via:
-
-- Squeeze: Global average pooling + Global max pooling (dual-pooling)
-- Excitation: FC(2048 -> 128) -> ReLU -> FC(128 -> 2048) -> Sigmoid
-- Scale: Channel-wise multiplication
+Channel attention module implements channel-wise feature recalibration.
 
 ## Training Configuration
 
-| Parameter | Value |
-|-----------|-------|
-| Image size | 224 x 224 |
-| Batch size | 32 |
-| Epochs | 15 |
-| Learning rate | 1e-4 |
-| Optimizer | AdamW |
-| Weight decay | 1e-4 |
-| Scheduler | CosineAnnealingLR |
-| Dropout | 0.5 |
-| reduction ratio (r) | 16 |
-| CV folds | 5 |
-| Seeds | [42, 52, 62] |
+| Parameter           | Value             |
+| ------------------- | ----------------- |
+| Image size          | 224 x 224         |
+| Batch size          | 32                |
+| Epochs              | 15                |
+| Learning rate       | 1e-4              |
+| Optimizer           | AdamW             |
+| Weight decay        | 1e-4              |
+| Scheduler           | CosineAnnealingLR |
+| Dropout             | 0.5               |
+| reduction ratio (r) | 16                |
+| CV folds            | 5                 |
+| Seeds               | \[42, 52, 62]     |
 
 ## Reproducibility
 
