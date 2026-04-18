@@ -55,7 +55,7 @@ CONFIG = {
     "dropout": 0.5,
     "reduction": 16,
     "num_workers": 0,
-    "device": "mps"
+    "device": "auto"
 }
 
 SEEDS = [42, 52, 62]

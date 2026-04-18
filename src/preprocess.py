@@ -55,8 +55,11 @@ def check_raw_data():
     if not RAW_DIR.exists():
         print(f"[ERROR] Raw data directory not found: {RAW_DIR}")
         print("\nPlease download the SIPaKMeD dataset:")
-        print("1. Kaggle: kaggle datasets download -d mohaliy2016/papsinglecell")
-        print("2. Extract to: ./data/raw/")
+        print("1. Kaggle (mirror): kaggle datasets download -d mohaliy2016/papsinglecell")
+        print("2. Official source: https://www.cs.uoi.gr/~marina/sipakmed.html")
+        print("3. Extract to: ./data/raw/")
+        print("\nNote: Both sources contain the same SIPaKMeD dataset. Please cite the original paper:")
+        print("  Plissiti et al., 'SIPAKMED: A new dataset for feature and image based classification of normal and pathological cervical cells in Pap smear images', ICIP 2018")
         return False
 
     image_dirs = list(RAW_DIR.glob("*/"))
