@@ -1,0 +1,32 @@
+# Dependencies
+venv/
+env/
+*.pyc
+__pycache__/
+
+# Data
+/data/
+
+# Results
+/results/
+
+# Model weights
+/models/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
