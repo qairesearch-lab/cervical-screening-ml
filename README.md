@@ -19,7 +19,7 @@ experiments is intentionally not included in the executable path here.
     ├── preprocess.py      # Data preprocessing script
     ├── train.py           # Model training and evaluation script
     ├── run_experiment.py  # One-click experiment runner
-    └── generate_figures.py # Auxiliary reference figures (A-F) + manuscript Figure 6 option
+    └── generate_figures.py # Manuscript figures (Figure 3-6) generation
 ```
 
 ## Environment Setup
